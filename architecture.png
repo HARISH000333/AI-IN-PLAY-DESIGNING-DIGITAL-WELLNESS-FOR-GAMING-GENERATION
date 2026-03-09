@@ -1,0 +1,190 @@
+Gaming Wellness Platform - System Architecture
+=================================================
+
+Note: This is a text representation of the architecture diagram.
+For visual diagram, see: docs/architecture_diagram.txt
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                          GAMING WELLNESS PLATFORM                           │
+│                            ARCHITECTURE DIAGRAM                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────┐
+│      CLIENT LAYER (Frontend)     │
+├──────────────────────────────────┤
+│                                  │
+│  ┌────────────────────────────┐  │
+│  │   Browser (HTML5/CSS3)     │  │
+│  │  - Login/Signup Pages      │  │
+│  │  - Parent Dashboard        │  │
+│  │  - Child Portal            │  │
+│  │  - Analytics Dashboard     │  │
+│  └────────────────────────────┘  │
+│           ↓                       │
+│  ┌────────────────────────────┐  │
+│  │  JavaScript (Vanilla ES6)  │  │
+│  │  - Authentication Handler  │  │
+│  │  - API Client (JWT)        │  │
+│  │  - UI Manager              │  │
+│  │  - Data Processing         │  │
+│  └────────────────────────────┘  │
+│           ↓                       │
+│  ┌────────────────────────────┐  │
+│  │    LocalStorage (Token)    │  │
+│  │    Session Management      │  │
+│  └────────────────────────────┘  │
+└──────────────────────────────────┘
+           ↓  HTTP/HTTPS  ↓
+┌──────────────────────────────────┐
+│   API GATEWAY & MIDDLEWARE       │
+├──────────────────────────────────┤
+│                                  │
+│  ┌────────────────────────────┐  │
+│  │   CORS & Security Layer    │  │
+│  │  - CORS Protection         │  │
+│  │  - Rate Limiting           │  │
+│  │  - Request Validation      │  │
+│  └────────────────────────────┘  │
+│           ↓                       │
+│  ┌────────────────────────────┐  │
+│  │  JWT Authentication Verify │  │
+│  │  - Token Validation        │  │
+│  │  - Role-Based Access       │  │
+│  │  - Permission Check        │  │
+│  └────────────────────────────┘  │
+└──────────────────────────────────┘
+           ↓                 
+┌──────────────────────────────────────────────────────────────────────┐
+│               APPLICATION SERVER LAYER (Backend)                    │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  Node.js + Express.js Server                                        │
+│                                                                      │
+│  ┌────────────────┬─────────────┬──────────────┬─────────────────┐ │
+│  │  Auth Routes   │  User Routes │ Games Routes │ Analytics Routes│ │
+│  ├────────────────┼─────────────┼──────────────┼─────────────────┤ │
+│  │ - Signup       │ - Profile   │ - Start      │ - Child Stats   │ │
+│  │ - Login        │ - Children  │ - End        │ - Weekly Data   │ │
+│  │ - Logout       │ - Settings  │ - History    │ - ML Predict    │ │
+│  │ - Validate     │ - Gaming Lim│ - Score      │ - Wellness      │ │
+│  └────────────────┴─────────────┴──────────────┴─────────────────┘ │
+│                          ↓                                          │
+│  ┌────────────────────────────────────────────────────────────┐   │
+│  │        Business Logic Layer                               │   │
+│  │  - Data Validation                                        │   │
+│  │  - Algorithm Implementation                              │   │
+│  │  - Privacy Enforcement                                   │   │
+│  │  - Alert Generation                                      │   │
+│  └────────────────────────────────────────────────────────────┘   │
+│                          ↓                                          │
+│  ┌────────────────────────────────────────────────────────────┐   │
+│  │        ML Prediction Integration                          │   │
+│  │  - Wellness Risk Assessment                              │   │
+│  │  - Gaming Pattern Analysis                               │   │
+│  │  - Predictive Modeling                                   │   │
+│  │  - Recommendation Engine                                 │   │
+│  └────────────────────────────────────────────────────────────┘   │
+└──────────────────────────────────────────────────────────────────────┘
+           ↓                              ↓
+┌──────────────────────────┐   ┌──────────────────────────────┐
+│   DATA PERSISTENCE       │   │  ML SERVICE LAYER (Python)   │
+├──────────────────────────┤   ├──────────────────────────────┤
+│                          │   │                              │
+│  ┌────────────────────┐  │   │  ┌──────────────────────┐   │
+│  │   database.json    │  │   │  │  ML Model Training   │   │
+│  │  (File-based DB)   │  │   │  │  - Linear Regression │   │
+│  │                    │  │   │  │  - Logistic Regr.    │   │
+│  │  ┌──────────────┐  │  │   │  │  - KNN Algorithm     │   │
+│  │  │ Parents      │  │  │   │  └──────────────────────┘   │
+│  │  │ Children     │  │  │   │           ↓                 │
+│  │  │ Sessions     │  │  │   │  ┌──────────────────────┐   │
+│  │  │ Analytics    │  │  │   │  │ Trained Models       │   │
+│  │  │ Alerts       │  │  │   │  │ - model_lr.pkl       │   │
+│  │  └──────────────┘  │  │   │  │ - model_log.pkl      │   │
+│  │                    │  │   │  │ - model_knn.pkl      │   │
+│  │  Auto-Loading on   │  │   │  └──────────────────────┘   │
+│  │  Server Start      │  │   │           ↓                 │
+│  │                    │  │   │  ┌──────────────────────┐   │
+│  │  Real-time Write   │  │   │  │  Flask API Server    │   │
+│  │  Operations        │  │   │  │  (Port 5001)         │   │
+│  └────────────────────┘  │   │  │  - Predictions       │   │
+│                          │   │  │  - Model Inference   │   │
+└──────────────────────────┘   │  └──────────────────────┘   │
+                               └──────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────┐
+│                    COMMUNICATION FLOW                               │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  1. Parent Login:                                                   │
+│     Browser → Auth Route → JWT Generate → Browser (Token)          │
+│                                                                      │
+│  2. Dashboard Load:                                                 │
+│     Browser + Token → Auth Verify → User Route → Database → JSON   │
+│                                                                      │
+│  3. Gaming Session:                                                 │
+│     Child → Games Route → Update Session → Database → JSON          │
+│                                                                      │
+│  4. ML Prediction:                                                  │
+│     Analytics Route → Python Service → ML Model → Result → API      │
+│                                                                      │
+│  5. Alerts:                                                         │
+│     Alerts Route → Check Conditions → Generate Alert → Database     │
+│                                                                      │
+└──────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────┐
+│                       TECHNOLOGY STACK                              │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  Frontend:           Backend:           Database:   ML:             │
+│  - HTML5            - Node.js            - JSON     - Python         │
+│  - CSS3             - Express.js         - File     - scikit-learn   │
+│  - JavaScript       - bcryptjs           - Based    - Flask API      │
+│  - Responsive       - JWT                          - pandas/numpy   │
+│                     - CORS                                         │
+│                                                                      │
+└──────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────┐
+│                    SECURITY & VALIDATION                           │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  Layer 1: Transport Security (HTTPS)                               │
+│  Layer 2: CORS & Rate Limiting                                     │
+│  Layer 3: Authentication (JWT Token)                               │
+│  Layer 4: Authorization (Role-Based Access)                        │
+│  Layer 5: Input Validation                                         │
+│  Layer 6: Encryption (Password Hashing - bcryptjs)                 │
+│                                                                      │
+└──────────────────────────────────────────────────────────────────────┘
+
+DEPLOYMENT ARCHITECTURE (Optional)
+
+┌──────────────┐
+│   Internet   │
+└──────────────┘
+       ↓
+┌──────────────────────────────────┐
+│   Load Balancer (Coming Soon)    │
+└──────────────────────────────────┘
+       ↓
+┌───────────────────────────────────────┐
+│   Server Farm (Multiple Instances)    │
+│  ┌─────────────┬─────────────────────┐│
+│  │ Instance 1  │  Instance 2         ││
+│  │ (Hotspot)   │  (Failover)         ││
+│  └─────────────┴─────────────────────┘│
+└───────────────────────────────────────┘
+       ↓
+┌──────────────────────────────────────┐
+│   Distributed Database (Planned)      │
+│  - Primary Database                  │
+│  - Backup Database                   │
+│  - Replication                       │
+└──────────────────────────────────────┘
+
+CURRENT STATUS: Single Instance Deployment
+Production Ready: YES ✅
+Scale Ready: YES (Architecture supports scaling)
+Cloud Compatible: YES (AWS, Azure, GCP compatible)
