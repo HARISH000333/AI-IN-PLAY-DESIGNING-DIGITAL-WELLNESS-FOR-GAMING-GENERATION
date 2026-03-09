@@ -3,7 +3,7 @@ Gaming Wellness Platform - Demo & Demo Video Link
 
 LIVE DEMO ACCESS
 ================
-Local Development Server: http://localhost:5000
+Local Development Server: http://localhost:5000/#contact
 
 DEMO CREDENTIALS
 ================
